@@ -12,6 +12,7 @@ export default class MightyLifter extends Component {
   constructor(props) {
     super(props);
     const { apiKey, authDomain, databaseURL, storageBucket, messagingSenderId } = firebaseConfig;
+    
     global.firebase = firebase.initializeApp({
       apiKey,
       authDomain,
