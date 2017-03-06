@@ -6,12 +6,12 @@ import {
 } from 'react-native';
 import * as firebase from 'firebase';
 import AppContainer from './app/Components/AppContainer';
-import { apiKey, authDomain, databaseURL, storageBucket, messagingSenderId } from './firebaseConfig';
+import firebaseConfig from './firebaseConfig';
 
 export default class MightyLifter extends Component {
   constructor(props) {
     super(props);
-    const {}
+    const { apiKey, authDomain, databaseURL, storageBucket, messagingSenderId } = firebaseConfig;
     global.firebase = firebase.initializeApp({
       apiKey,
       authDomain,
