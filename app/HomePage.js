@@ -43,34 +43,25 @@ export default class HomePage extends Component {
         })
       }
     });
+    this.checkForUser();
   }
 
-  async googleSignIn() {
-    console.log('hello');
-    await firebase.auth().signInWithPopup(provider).then(function (result) {
-      console.log(result);
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      // ...
-    }).catch(function (error) {
-      console.log(error);
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
+  async checkForUser() {
+    try {
+      const user = firebase.auth().currentUser;
+      this.setState({
+        loggedInUser: user,
+        initialLoading: true
+      })
+    } catch(error) {
+      console.log({error});
+    }
   }
 
   async signup() {
     try {
-      await firebase.auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password);
+      const newUser = await firebase.auth()
+        .createUserWithEmailAndPassword(this.state.userName, this.state.password);
 
       alert("Account created");
 
@@ -145,6 +136,9 @@ export default class HomePage extends Component {
 
   render() {
     const { width, height } = Dimensions.get('window');
+    if (!this.state.initialLoading) {
+      return null;
+    }
     return (
       <View style={styles.container}>
         <Image
