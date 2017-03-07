@@ -85,6 +85,33 @@ export default class AppContainer extends Component {
     };
   }
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          loggedInUser: true
+        })
+      } else {
+        this.setState({
+          loggedInUser: false
+        })
+      }
+    });
+    this.checkForUser();
+  }
+
+  async checkForUser() {
+    try {
+      const user = firebase.auth().currentUser;
+      this.setState({
+        loggedInUser: user,
+        initialLoading: true
+      })
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+
   toggleSideMenu() {
     this.setState({
       isOpen: true
@@ -188,7 +215,7 @@ export default class AppContainer extends Component {
                 LeftButton: (route, navigator, index, navState) =>
                 { return (this.renderNavItem('arrow-left', navigator.pop)); },
                 RightButton: (route, navigator, index, navState) =>
-                { return (this.renderNavItem('bars', this.toggleSideMenu.bind(this))); },
+                { return (this.state.loggedInUser && this.renderNavItem('bars', this.toggleSideMenu.bind(this))); },
                 Title: (route, navigator, index, navState) =>
                 { return null; },
               }}
@@ -204,7 +231,7 @@ export default class AppContainer extends Component {
                 <TouchableHighlight
                   onPress={this.jumpToScene.bind(this, navigator, routeId)}
                   key={icon}>
-                  <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', width: 50}}>
+                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: 50 }}>
                     <Icon name={icon} size={20} color={color} />
                   </View>
                 </TouchableHighlight>

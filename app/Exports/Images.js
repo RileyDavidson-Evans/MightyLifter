@@ -5,7 +5,7 @@ export default {
   Pushup: require('../../images/StockWorkoutImages/Pushup.png'),
   ChinUp: require('../../images/StockWorkoutImages/ChinUp.png'),
   Curls: require('../../images/StockWorkoutImages/Curls.png'),
-  BenchPressProfile: require('../../images/StockWorkoutImages/BenchPressProfile.jpg'),
+  BenchPressProfile: require('../../images/StockWorkoutImages/benchPressGif.gif'),
   SquatProfile: require('../../images/StockWorkoutImages/SquatProfile.jpg'),
   ShoulderPressProfile: require('../../images/StockWorkoutImages/ShoulderPressProfile.png'),
   PushupProfile: require('../../images/StockWorkoutImages/PushupProfile.png'),
