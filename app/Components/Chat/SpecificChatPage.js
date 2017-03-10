@@ -5,7 +5,7 @@ import {
   ListView,
   Dimensions,
   TextInput,
-  Button
+  TouchableHighlight,
 } from 'react-native';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,11 +40,15 @@ export default class ChatHome extends Component {
     this.getPosts();
   }
   postChat() {
+    if (!this.state.text) return;
     var newPostKey = firebase.database().ref().child('Chats/' + this.props.chatName).push().key;
     firebase.database().ref(`Chats/${this.props.chatName}/${newPostKey}`).set({
       text: this.state.text,
       date: new Date().toString(),
       displayName: firebase.auth().currentUser.displayName
+    });
+    this.setState({
+      text: ''
     });
   }
   getPosts() {
@@ -76,10 +80,11 @@ export default class ChatHome extends Component {
         alignSelf: myPost ? 'flex-end' : 'flex-start'
       },
       text: { color: myPost ? 'white' : 'blue' },
-      userName: { 
-        alignSelf: myPost ? 'flex-end' : 'flex-start', 
-        fontSize: 10, 
-        color: myPost ? 'white' : 'black'}
+      userName: {
+        alignSelf: myPost ? 'flex-end' : 'flex-start',
+        fontSize: 10,
+        color: myPost ? 'white' : 'black'
+      }
     };
     styles.view.backgroundColor = myPost ? 'blue' : 'white';
     return styles;
@@ -110,8 +115,12 @@ export default class ChatHome extends Component {
           }
         />
         <View style={{ width, justifyContent: 'center', alignItems: 'center', marginBottom: 10, flexDirection: 'row' }}>
-          <TextInput onSubmitEditing={this.postChat.bind(this)} style={{ width: width * .8 }} onChangeText={(text) => this.setState({ text })} />
-          <Icon name="paper-plane" size={24} color='black' />
+          <TextInput blurOnSubmit={false} value={this.state.text} onSubmitEditing={this.postChat.bind(this)} style={{ width: width * .8 }} onChangeText={(text) => this.setState({ text })} />
+          <TouchableHighlight
+          underlayColor="#9E9E9E"
+          onPress={this.postChat.bind(this)}>
+            <Icon name="paper-plane" size={24} color='black' />
+          </TouchableHighlight>
         </View>
       </View>
     );
