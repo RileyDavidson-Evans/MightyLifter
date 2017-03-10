@@ -228,7 +228,7 @@ export default class AppContainer extends Component {
                 RightButton: (route, navigator, index, navState) =>
                 { return (this.state.loggedInUser && this.renderNavItem('bars', this.toggleSideMenu.bind(this))); },
                 Title: (route, navigator, index, navState) =>
-                { return null; },
+                { return <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center'}}><Text style={{color: 'white'}}>{route.chatName}</Text></View>; },
               }}
               style={{ backgroundColor: 'black' }}
             />
@@ -236,10 +236,10 @@ export default class AppContainer extends Component {
         />
         {
           this.state.loggedInUser &&
-          <View style={{ height: 40, backgroundColor: '#9E9E9E', flexDirection: 'row', justifyContent: 'space-around' }}>
+          <View style={{ height: 40, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-around' }}>
             {
               bottomNavBar.map(({ icon, routeId }) => {
-                const color = this.state.activeRoute === routeId ? 'green' : 'black';
+                const color = this.state.activeRoute === routeId ? 'green' : 'white';
                 return (
                   <TouchableHighlight
                     onPress={this.jumpToScene.bind(this, navigator, routeId)}

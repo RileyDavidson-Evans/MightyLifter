@@ -92,7 +92,7 @@ export default class ChatHome extends Component {
   render() {
     const { width } = Dimensions.get('window');
     return (
-      <View style={{ flex: 1, backgroundColor: 'grey' }}>
+      <View style={{ flex: 1, backgroundColor: '#9E9E9E' }}>
         <ListView
           ref="scrollView"
           enableEmptySections

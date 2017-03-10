@@ -25,7 +25,7 @@ export default class ChatHome extends Component {
   componentWillUnmount() {
     firebase.database().ref('/Chats').off();
   }
-  
+
   goToChat(chatName) {
     this.props.navigator.push({
       id: 'SpecificChatPage',
@@ -56,13 +56,15 @@ export default class ChatHome extends Component {
           dataSource={this.state.dataSource}
           renderRow={(data) => {
             return (
-              <TouchableHighlight
-                underlayColor="#9E9E9E"
-                onPress={this.goToChat.bind(this, data)}>
-                <View style={{ width: width * .8, backgroundColor: 'blue', height: 30, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
-                  <Text style={{ color: 'white' }}>{data}</Text>
-                </View>
-              </TouchableHighlight>
+              <View style={{ marginTop: 20 }}>
+                <TouchableHighlight
+                  underlayColor="#9E9E9E"
+                  onPress={this.goToChat.bind(this, data)}>
+                  <View style={{ width: width * .8, backgroundColor: 'blue', height: 30, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ color: 'white' }}>{data}</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             );
           }
           }
