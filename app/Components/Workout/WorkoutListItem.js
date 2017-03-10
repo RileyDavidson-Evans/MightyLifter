@@ -14,7 +14,7 @@ export default class WorkoutListItem extends Component {
     this.state = { };
   }
   logWorkout() {
-    this.props.navigator.push({
+    this.props.navigator[__DEV__ ? 'replace' : 'push']({
       id: 'LogWorkout',
       workoutId: this.props.data.id
     });

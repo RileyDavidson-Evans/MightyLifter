@@ -24,7 +24,7 @@ class Menu extends React.Component {
         key={text}
         onPress={() => {
           this.props.toggleSideMenuClose();
-          this.props.navigator.push({ id: goToPageId });
+          this.props.navigator[__DEV__ ? 'replace' : 'push']({ id: goToPageId });
         }}>
         <View style={{ margin: 5, backgroundColor: color, padding: 5, justifyContent: 'center', alignItems: 'center', borderRadius: 10, flexDirection: 'row', elevation: 5 }}>
           <Icon name={icon} size={20} color={iconColor} />
@@ -138,7 +138,7 @@ export default class AppContainer extends Component {
     this.setState({
       activeRoute: id
     });
-    this.refs.navigator.push({
+    this.refs.navigator[__DEV__ ? 'replace' : 'push']({
       id
     });
   }

@@ -25,18 +25,6 @@ export default class ChatHome extends Component {
 
   componentDidMount() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    console.log(this.props.chatName);
-    firebase.database().ref('Chats/' + this.props.chatName).limitToLast(10).once('value').then((snapshot) => {
-      let allChats = snapshot.val();
-      allChats = _.sortBy(allChats, ['date']);
-      let chatArray = [];
-      _.forEach(allChats, chat => {
-        chatArray.push(chat);
-      });
-      this.setState({
-        dataSource: ds.cloneWithRows(chatArray)
-      });
-    });
     this.getPosts();
   }
   postChat() {
@@ -55,13 +43,12 @@ export default class ChatHome extends Component {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     firebase.database().ref(`/Chats/${this.props.chatName}`).limitToLast(10).on('value', (snapshot) => {
       let allChats = snapshot.val();
-      allChats = _.sortBy(allChats, ['date']);
       let chatArray = [];
       _.forEach(allChats, chat => {
         chatArray.push(chat);
       });
       this.setState({
-        dataSource: ds.cloneWithRows(chatArray)
+        dataSource: ds.cloneWithRows(allChats)
       });
     });
   }
@@ -115,7 +102,7 @@ export default class ChatHome extends Component {
           }
         />
         <View style={{ width, justifyContent: 'center', alignItems: 'center', marginBottom: 10, flexDirection: 'row' }}>
-          <TextInput blurOnSubmit={false} value={this.state.text} onSubmitEditing={this.postChat.bind(this)} style={{ width: width * .8 }} onChangeText={(text) => this.setState({ text })} />
+          <TextInput autoCorrect blurOnSubmit={false} value={this.state.text} onSubmitEditing={this.postChat.bind(this)} style={{ width: width * .8 }} onChangeText={(text) => this.setState({ text })} />
           <TouchableHighlight
           underlayColor="#9E9E9E"
           onPress={this.postChat.bind(this)}>

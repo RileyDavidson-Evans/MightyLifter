@@ -93,7 +93,7 @@ export default class HomePage extends Component {
     if (this.state.loggedInUser) {
       return (
         <View style={{ width: width * .8 }}>
-          <TextInput style={{ color: 'white' }} onChangeText={(displayName) => this.setState({ displayName })} />
+          <TextInput placeholderTextColor="white" placeholder={firebase.auth().currentUser.displayName} style={{ color: 'white' }} onChangeText={(displayName) => this.setState({ displayName })} />
           <Button onPress={this.setUsername.bind(this)} title="Update username" />
         </View>
       )
@@ -119,7 +119,7 @@ export default class HomePage extends Component {
 
   goToHistory() {
     if (this.state.loggedInUser) {
-      this.props.navigator.push({
+      this.props.navigator.replace({
         id: 'UserLoggedIn',
       });
     }
@@ -130,7 +130,7 @@ export default class HomePage extends Component {
   }
 
   navigatorGoTo(id) {
-    this.props.navigator.push({
+    this.props.navigator.replace({
       id
     });
   }

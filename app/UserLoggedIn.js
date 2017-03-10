@@ -83,7 +83,7 @@ export default class UserLoggedIn extends Component {
   }
 
   goToLogPage() {
-    this.props.navigator.push({
+    this.props.navigator[__DEV__ ? 'replace' : 'push']({
       id: 'ViewWorkouts',
     });
   }

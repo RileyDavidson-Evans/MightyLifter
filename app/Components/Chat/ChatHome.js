@@ -27,7 +27,7 @@ export default class ChatHome extends Component {
   }
 
   goToChat(chatName) {
-    this.props.navigator.push({
+    this.props.navigator[__DEV__ ? 'replace' : 'push']({
       id: 'SpecificChatPage',
       workoutId: null,
       chatName

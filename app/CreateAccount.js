@@ -47,7 +47,7 @@ export default class HomePage extends Component {
         displayName
       })
 
-      this.props.navigator.push({
+      this.props.navigator[__DEV__ ? 'replace' : 'push']({
         id: 'HomePage'
       })
       // Navigate to the Home page, the user is auto logged in
