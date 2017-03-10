@@ -4,6 +4,7 @@ import UserLoggedIn from '../UserLoggedIn';
 import Workouts from '../Components/Workout/Workouts';
 import LogWorkout from '../Components/Workout/LogWorkout';
 import ChatHome from '../Components/Chat/ChatHome';
+import SpecificChatPage from '../Components/Chat/SpecificChatPage';
 import {
   View,
   Navigator,
@@ -22,7 +23,7 @@ class Menu extends React.Component {
         key={text}
         onPress={() => {
           this.props.toggleSideMenuClose();
-          this.props.navigator.replace({ id: goToPageId });
+          this.props.navigator.push({ id: goToPageId });
         }}>
         <View style={{ margin: 5, backgroundColor: color, padding: 5, justifyContent: 'center', alignItems: 'center', borderRadius: 10, flexDirection: 'row', elevation: 5 }}>
           <Icon name={icon} size={20} color={iconColor} />
@@ -136,24 +137,24 @@ export default class AppContainer extends Component {
     this.setState({
       activeRoute: id
     });
-    this.refs.navigator.replace({
+    this.refs.navigator.push({
       id
     });
   }
   renderScene(route, navigator) {
-    const { id, workoutId } = route;
+    const { id, workoutId, chatName } = route;
     const menu = <Menu navigator={navigator} toggleSideMenuClose={this.toggleSideMenuClose.bind(this)} />;
     return (
       <SideMenu onChange={this.closeSideNav.bind(this)} menu={menu} disableGestures menuPosition='right' isOpen={this.state.isOpen}>
         <View style={{ marginTop: 56, flex: 1 }}>
           {
-            this.renderSpecificScene(navigator, id, workoutId)
+            this.renderSpecificScene(navigator, id, { workoutId, chatName })
           }
         </View>
       </SideMenu>
     );
   }
-  renderSpecificScene(navigator, id, workoutId) {
+  renderSpecificScene(navigator, id, { workoutId, chatName }) {
 
     switch (id) {
       case 'HomePage':
@@ -176,6 +177,10 @@ export default class AppContainer extends Component {
         return (
           <ChatHome toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
         );
+      case 'SpecificChatPage':
+      return (
+        <SpecificChatPage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} chatName={chatName} />
+      );
       default:
         return (
           <HomePage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
@@ -200,7 +205,7 @@ export default class AppContainer extends Component {
     const bottomNavBar = [
       { routeId: 'HomePage', icon: 'home' },
       { routeId: 'ViewWorkouts', icon: 'arrow-circle-up' },
-      { routeId: 'ChatHome', icon: 'envelope-o' },
+      { routeId: 'ChatHome', icon: 'comments' },
       { routeId: 'UserLoggedIn', icon: 'history' }
     ];
     return (
@@ -223,16 +228,17 @@ export default class AppContainer extends Component {
             />
           }
         />
-        <View style={{ height: 40, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-around' }}>
+        <View style={{ height: 40, backgroundColor: '#9E9E9E', flexDirection: 'row', justifyContent: 'space-around' }}>
           {
             bottomNavBar.map(({ icon, routeId }) => {
-              const color = this.state.activeRoute === routeId ? 'green' : 'white';
+              const color = this.state.activeRoute === routeId ? 'green' : 'black';
               return (
                 <TouchableHighlight
                   onPress={this.jumpToScene.bind(this, navigator, routeId)}
+                  underlayColor="#9E9E9E"
                   key={icon}>
                   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: 50 }}>
-                    <Icon name={icon} size={20} color={color} />
+                    <Icon name={icon} size={24} color={color} />
                   </View>
                 </TouchableHighlight>
               );

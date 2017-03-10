@@ -4,15 +4,17 @@ import {
   Text,
   TouchableHighlight,
   ListView,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native';
+import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const SideMenu = require('react-native-side-menu');
 
 export default class ChatHome extends Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({ rowHasChangted: (r1, r2) => r1 !== r2 });
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       dataSource: ds.cloneWithRows([])
     };
@@ -20,15 +22,51 @@ export default class ChatHome extends Component {
   componentDidMount() {
     this.getPosts();
   }
+  componentWillUnmount() {
+    firebase.database().ref('/Chats').off();
+  }
+  
+  goToChat(chatName) {
+    this.props.navigator.push({
+      id: 'SpecificChatPage',
+      workoutId: null,
+      chatName
+    });
+  }
   getPosts() {
-    return firebase.database().ref('/Chats').once('value').then((snapshot) => {
-      console.log(snapshot.val());
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    firebase.database().ref('/Chats').on('value', (snapshot) => {
+      const allChats = snapshot.val();
+      let chatArray = [];
+      _.forEach(_.keys(allChats), chat => {
+        chatArray.push(chat);
+      });
+      this.setState({
+        dataSource: ds.cloneWithRows(chatArray)
+      });
     });
   }
   render() {
+    const { width, height } = Dimensions.get('window');
     return (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <Text>Hello</Text>
+      <View style={{ flex: 1, backgroundColor: '#9E9E9E' }}>
+        <ListView
+          enableEmptySections
+          contentContainerStyle={{ backgroundColor: '#9E9E9E', width, alignItems: 'center' }}
+          dataSource={this.state.dataSource}
+          renderRow={(data) => {
+            return (
+              <TouchableHighlight
+                underlayColor="#9E9E9E"
+                onPress={this.goToChat.bind(this, data)}>
+                <View style={{ width: width * .8, backgroundColor: 'blue', height: 30, borderRadius: 5, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
+                  <Text style={{ color: 'white' }}>{data}</Text>
+                </View>
+              </TouchableHighlight>
+            );
+          }
+          }
+        />
       </View>
     );
   }

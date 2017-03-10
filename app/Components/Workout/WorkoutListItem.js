@@ -11,12 +11,10 @@ import images from '../../Exports/Images';
 export default class WorkoutListItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
+    this.state = { };
   }
   logWorkout() {
-    this.props.navigator.replace({
+    this.props.navigator.push({
       id: 'LogWorkout',
       workoutId: this.props.data.id
     });

@@ -102,7 +102,7 @@ export default class HomePage extends Component {
 
   goToHistory() {
     if (this.checkForLoggedInUser) {
-      this.props.navigator.replace({
+      this.props.navigator.push({
         id: 'UserLoggedIn',
       });
     }
@@ -117,7 +117,7 @@ export default class HomePage extends Component {
   }
 
   goToWorkout() {
-    this.props.navigator.replace({
+    this.props.navigator.push({
       id: 'ViewWorkouts',
     });
   }

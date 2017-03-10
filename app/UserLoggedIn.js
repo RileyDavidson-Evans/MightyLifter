@@ -83,7 +83,7 @@ export default class UserLoggedIn extends Component {
   }
 
   goToLogPage() {
-    this.props.navigator.replace({
+    this.props.navigator.push({
       id: 'ViewWorkouts',
     });
   }
@@ -92,7 +92,7 @@ export default class UserLoggedIn extends Component {
     const { width, height } = Dimensions.get('window');
     if (!this.state.display) {
       return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, backgroundColor: 'white'}}>
           <Image
           style={{height, resizeMode: 'cover', width}}
             source={images.Loading}
