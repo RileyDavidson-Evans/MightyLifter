@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import HomePage from '../HomePage';
+import CreateAccount from '../CreateAccount';
 import UserLoggedIn from '../UserLoggedIn';
 import Workouts from '../Components/Workout/Workouts';
 import LogWorkout from '../Components/Workout/LogWorkout';
@@ -146,7 +147,7 @@ export default class AppContainer extends Component {
     const menu = <Menu navigator={navigator} toggleSideMenuClose={this.toggleSideMenuClose.bind(this)} />;
     return (
       <SideMenu onChange={this.closeSideNav.bind(this)} menu={menu} disableGestures menuPosition='right' isOpen={this.state.isOpen}>
-        <View style={{ marginTop: 56, flex: 1 }}>
+        <View style={{ marginTop: this.state.loggedInUser ? 56 : 0, flex: 1 }}>
           {
             this.renderSpecificScene(navigator, id, { workoutId, chatName })
           }
@@ -160,6 +161,10 @@ export default class AppContainer extends Component {
       case 'HomePage':
         return (
           <HomePage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
+        );
+      case 'CreateAccount':
+        return (
+          <CreateAccount toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
         );
       case 'UserLoggedIn':
         return (
@@ -178,9 +183,9 @@ export default class AppContainer extends Component {
           <ChatHome toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
         );
       case 'SpecificChatPage':
-      return (
-        <SpecificChatPage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} chatName={chatName} />
-      );
+        return (
+          <SpecificChatPage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} chatName={chatName} />
+        );
       default:
         return (
           <HomePage toggleSideMenu={this.toggleSideMenu.bind(this)} navigator={navigator} />
@@ -215,6 +220,7 @@ export default class AppContainer extends Component {
           renderScene={this.renderScene.bind(this)}
           ref="navigator"
           navigationBar={
+            this.state.loggedInUser &&
             <Navigator.NavigationBar
               routeMapper={{
                 LeftButton: (route, navigator, index, navState) =>
@@ -228,23 +234,26 @@ export default class AppContainer extends Component {
             />
           }
         />
-        <View style={{ height: 40, backgroundColor: '#9E9E9E', flexDirection: 'row', justifyContent: 'space-around' }}>
-          {
-            bottomNavBar.map(({ icon, routeId }) => {
-              const color = this.state.activeRoute === routeId ? 'green' : 'black';
-              return (
-                <TouchableHighlight
-                  onPress={this.jumpToScene.bind(this, navigator, routeId)}
-                  underlayColor="#9E9E9E"
-                  key={icon}>
-                  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: 50 }}>
-                    <Icon name={icon} size={24} color={color} />
-                  </View>
-                </TouchableHighlight>
-              );
-            })
-          }
-        </View>
+        {
+          this.state.loggedInUser &&
+          <View style={{ height: 40, backgroundColor: '#9E9E9E', flexDirection: 'row', justifyContent: 'space-around' }}>
+            {
+              bottomNavBar.map(({ icon, routeId }) => {
+                const color = this.state.activeRoute === routeId ? 'green' : 'black';
+                return (
+                  <TouchableHighlight
+                    onPress={this.jumpToScene.bind(this, navigator, routeId)}
+                    underlayColor="#9E9E9E"
+                    key={icon}>
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: 50 }}>
+                      <Icon name={icon} size={24} color={color} />
+                    </View>
+                  </TouchableHighlight>
+                );
+              })
+            }
+          </View>
+        }
       </View>
     );
   }

@@ -20,8 +20,7 @@ export default class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedInUser: false,
-      userName: '',
+      email: '',
       password: '',
       message: ' ',
       displayName: ''
@@ -33,51 +32,33 @@ export default class HomePage extends Component {
       this.props.navigator.pop();
       return true;
     });
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({
-          loggedInUser: true
-        })
-      } else {
-        this.setState({
-          loggedInUser: false
-        })
-      }
-    });
-    this.checkForUser();
-  }
-
-  async checkForUser() {
-    try {
-      const user = await firebase.auth().currentUser;
-      this.setState({
-        loggedInUser: user,
-        initialLoading: true
-      })
-    } catch (error) {
-      console.log({ error });
-    }
   }
 
   async signup() {
     try {
       const newUser = await firebase.auth()
-        .createUserWithEmailAndPassword(this.state.userName, this.state.password);
-
+        .createUserWithEmailAndPassword(this.state.email, this.state.password);
       alert("Account created");
 
-      // Navigate to the Home page, the user is auto logged in
+      var user = await firebase.auth().currentUser;
+      const { displayName } = this.state;
 
+      user.updateProfile({
+        displayName
+      })
+
+      this.props.navigator.push({
+        id: 'HomePage'
+      })
+      // Navigate to the Home page, the user is auto logged in
     } catch (error) {
       this.setState({ message: error.toString() });
     }
-
   }
 
-  async setUsername() {
+  async setemail() {
     var user = await firebase.auth().currentUser;
     const { displayName } = this.state;
-
     user.updateProfile({
       displayName
     }).then(function () {
@@ -90,53 +71,22 @@ export default class HomePage extends Component {
   }
 
   renderLogin(width) {
-    if (this.state.loggedInUser) {
-      return (
-        <View style={{ width: width * .8 }}>
-          <TextInput style={{ color: 'white' }} onChangeText={(displayName) => this.setState({ displayName })} />
-          <Button onPress={this.setUsername.bind(this)} title="Update username" />
-        </View>
-      )
-    } else {
-      return (
-        <View>
-          <TextInput keyboardType="email-address" onChangeText={(userName) => { this.setState({ userName }) }} value={this.state.userName} placeholder="Username" style={{ width: width * .8, height: 50, color: 'white' }} placeholderTextColor="white" underlineColorAndroid="white" />
-          <TextInput secureTextEntry onChangeText={(password) => { this.setState({ password }) }} value={this.state.password} placeholder="Password" style={{ width: width * .8, height: 50 }} placeholderTextColor="white" underlineColorAndroid="white" />
-        </View>
-      );
-    }
+    return (
+      <View>
+        <TextInput placeholderTextColor="white" onChangeText={(displayName) => this.setState({ displayName })} value={this.state.displayName} placeholder="Username" />
+        <TextInput keyboardType="email-address" onChangeText={(email) => { this.setState({ email }) }} value={this.state.email} placeholder="Email" style={{ width: width * .8, height: 50, color: 'white' }} placeholderTextColor="white" underlineColorAndroid="white" />
+        <TextInput secureTextEntry onChangeText={(password) => { this.setState({ password }) }} value={this.state.password} placeholder="Password" style={{ width: width * .8, height: 50 }} placeholderTextColor="white" underlineColorAndroid="white" />
+      </View>
+    );
   }
 
   async login() {
     try {
-      await firebase.auth().signInWithEmailAndPassword(this.state.userName, this.state.password);
+      await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
       this.setState({ message: '', password: '' });
     } catch (error) {
       this.setState({ message: 'Invalid Email / Password combination!' });
     }
-
-  }
-
-  goToHistory() {
-    if (this.state.loggedInUser) {
-      this.props.navigator.push({
-        id: 'UserLoggedIn',
-      });
-    }
-  }
-
-  logout() {
-    firebase.auth().signOut();
-  }
-
-  navigatorGoTo(id) {
-    this.props.navigator.push({
-      id
-    });
-  }
-
-  goToProfile() {
-
   }
 
   renderButton({ title, onPress, color }) {
@@ -149,9 +99,6 @@ export default class HomePage extends Component {
 
   render() {
     const { width, height } = Dimensions.get('window');
-    if (!this.state.initialLoading) {
-      return null;
-    }
     return (
       <View style={styles.container}>
         <Image
@@ -165,9 +112,8 @@ export default class HomePage extends Component {
           source={require('../images/gymNow.jpg')}>
           <View style={styles.container}>
             <View style={{ width, justifyContent: 'center', alignItems: 'center', paddingTop: width * .1 }}>
-              <Text style={{ color: 'white', fontSize: 60, padding: 20, }}>Welcome!</Text>
+              <Text style={{ color: 'white', fontSize: 40, padding: 20, }}>Create Account!</Text>
             </View>
-
             <View style={styles.loginContainer}>
               {
                 this.renderLogin(width)
@@ -177,22 +123,8 @@ export default class HomePage extends Component {
               </Text>
             </View>
             <View style={{ width }}>
-
               {
-                this.state.loggedInUser &&
-                this.renderButton({ title: 'Workouts', color: 'grey', onPress: this.navigatorGoTo.bind(this, 'ViewWorkouts') })
-              }
-              {
-                !this.state.loggedInUser &&
-                this.renderButton({ title: 'Login', onPress: this.login })
-              }
-              {
-                !this.state.loggedInUser &&
-                this.renderButton({ title: 'Create Account', color: 'green', onPress: this.navigatorGoTo.bind(this, 'CreateAccount') })
-              }
-              {
-                this.state.loggedInUser &&
-                this.renderButton({ title: 'Logout', color: 'red', onPress: this.logout })
+                this.renderButton({ title: 'Create Account', color: 'green', onPress: this.signup })
               }
             </View>
           </View>
