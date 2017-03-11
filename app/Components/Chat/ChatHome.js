@@ -4,12 +4,10 @@ import {
   Text,
   TouchableHighlight,
   ListView,
-  Dimensions,
-  Image
+  Dimensions
 } from 'react-native';
 import _ from 'lodash';
-import Icon from 'react-native-vector-icons/FontAwesome';
-const SideMenu = require('react-native-side-menu');
+import * as firebase from "firebase";
 
 export default class ChatHome extends Component {
   constructor(props) {

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as firebase from "firebase";
 
 export default class ChatHome extends Component {
   constructor(props) {
@@ -24,7 +25,6 @@ export default class ChatHome extends Component {
   }
 
   componentDidMount() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.getPosts();
   }
   postChat() {
@@ -48,7 +48,18 @@ export default class ChatHome extends Component {
         chatArray.push(chat);
       });
       this.setState({
+        chatArray,
         dataSource: ds.cloneWithRows(allChats)
+      });
+    });
+    firebase.database().ref(`/Chats/${this.props.chatName}`).limitToLast(1).on('child_added', (snapshot) => {
+      let newChat = snapshot.val();
+      let chatArray = this.state.chatArray;
+      if (_.find(chatArray, ['date', newChat.date])) return;
+      chatArray.push(newChat);
+      this.setState({
+        chatArray,
+        dataSource: ds.cloneWithRows(chatArray)
       });
     });
   }
