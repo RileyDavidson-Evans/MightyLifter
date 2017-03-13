@@ -41,10 +41,10 @@ export default class Workouts extends Component {
   render() {
     const { width } = Dimensions.get('window');
     return (
-      <View style={{ flex: 1, backgroundColor: 'grey' }}>
+      <View style={{ flex: 1, backgroundColor: '#EEEEEE' }}>
         <View>
           <ListView
-            style={{ backgroundColor: 'grey', width }}
+            style={{ backgroundColor: '#EEEEEE', width }}
             dataSource={this.state.dataSource}
             renderRow={(data) => {
               return (

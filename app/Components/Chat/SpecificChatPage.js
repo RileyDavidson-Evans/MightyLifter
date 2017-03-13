@@ -41,7 +41,7 @@ export default class ChatHome extends Component {
   }
   getPosts() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    firebase.database().ref(`/Chats/${this.props.chatName}`).limitToLast(10).on('value', (snapshot) => {
+    firebase.database().ref(`/Chats/${this.props.chatName}`).limitToLast(10).once('value', (snapshot) => {
       let allChats = snapshot.val();
       let chatArray = [];
       _.forEach(allChats, chat => {
@@ -49,12 +49,12 @@ export default class ChatHome extends Component {
       });
       this.setState({
         chatArray,
-        dataSource: ds.cloneWithRows(allChats)
+        dataSource: ds.cloneWithRows(chatArray)
       });
     });
     firebase.database().ref(`/Chats/${this.props.chatName}`).limitToLast(1).on('child_added', (snapshot) => {
       let newChat = snapshot.val();
-      let chatArray = this.state.chatArray;
+      let { chatArray } = this.state;
       if (_.find(chatArray, ['date', newChat.date])) return;
       chatArray.push(newChat);
       this.setState({

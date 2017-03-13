@@ -45,7 +45,7 @@ export default class ChatHome extends Component {
     });
   }
   render() {
-    const { width, height } = Dimensions.get('window');
+    const { width } = Dimensions.get('window');
     return (
       <View style={{ flex: 1, backgroundColor: '#9E9E9E' }}>
         <ListView
