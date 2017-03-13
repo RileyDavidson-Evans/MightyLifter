@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import WorkoutItem from './WorkoutListItem';
-import CompletedWorkoutListItem from './CompletedWorkoutListItem';
 import {
   View,
   Dimensions,
@@ -14,7 +13,7 @@ export default class Workouts extends Component {
       dataSource: ds.cloneWithRows([
         {
           id: 'BenchPress',
-          text: 'Bench Press'
+          text: 'Bench Press',
         },
         {
           id: 'Squat',
@@ -22,19 +21,23 @@ export default class Workouts extends Component {
         },
         {
           id: 'Pushup',
-          text: 'Pushup'
+          text: 'Pushup',
+          complete: true
         },
         {
           id: 'ShoulderPress',
-          text: 'Shoulder Press'
+          text: 'Shoulder Press',
+          complete: true
         },
         {
           id: 'Curls',
-          text: 'Bicept Curls'
+          text: 'Bicept Curls',
+          complete: true
         },
         {
           id: 'ChinUp',
-          text: 'Chin Up'
+          text: 'Chin Up',
+          complete: true
         }
       ])
     };
@@ -48,9 +51,6 @@ export default class Workouts extends Component {
             style={{ backgroundColor: '#EEEEEE', width }}
             dataSource={this.state.dataSource}
             renderRow={(data) => {
-              if (data.id === 'BenchPress') {
-                return <CompletedWorkoutListItem navigator={this.props.navigator} data={data} />
-              }
               return (
                 <WorkoutItem navigator={this.props.navigator} data={data} />
               );
