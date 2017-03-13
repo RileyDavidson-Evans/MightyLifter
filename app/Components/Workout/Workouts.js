@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import WorkoutItem from './WorkoutListItem';
+import CompletedWorkoutListItem from './CompletedWorkoutListItem';
 import {
   View,
   Dimensions,
@@ -47,6 +48,9 @@ export default class Workouts extends Component {
             style={{ backgroundColor: '#EEEEEE', width }}
             dataSource={this.state.dataSource}
             renderRow={(data) => {
+              if (data.id === 'BenchPress') {
+                return <CompletedWorkoutListItem navigator={this.props.navigator} data={data} />
+              }
               return (
                 <WorkoutItem navigator={this.props.navigator} data={data} />
               );

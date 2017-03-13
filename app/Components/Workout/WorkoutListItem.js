@@ -30,7 +30,7 @@ export default class WorkoutListItem extends Component {
             </View>
             <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'space-between', padding: 8, flexDirection: 'row' }}>
               <View style={{ justifyContent: 'space-around' }}>
-                <Text style={{ color: 'black' }}>DEADLIFT</Text>
+                <Text style={{ color: 'black' }}>{this.props.data.text}</Text>
                 <View>
                   <Text style={{ fontSize: 8 }}>PERSONAL BEST</Text>
                   <Text style={{ fontSize: 8 }}>250 LBS</Text>
