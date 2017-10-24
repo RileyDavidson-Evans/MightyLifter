@@ -1,53 +1,57 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
+  View,
+  Image
 } from 'react-native';
+import * as firebase from 'firebase';
+import AppContainer from './app/Components/AppContainer';
+import firebaseConfig from './firebaseConfig';
 
 export default class MightyLifter extends Component {
+  constructor(props) {
+    super(props);
+    const { apiKey, authDomain, databaseURL, storageBucket, messagingSenderId } = firebaseConfig;
+    global.firebase = firebase.initializeApp({
+      apiKey,
+      authDomain,
+      databaseURL,
+      storageBucket,
+      messagingSenderId,
+    });
+    this.state = {
+      initialLoad: true
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        initialLoad: false
+      });
+    }, 1000);
+  }
+
   render() {
+    if (this.state.initialLoad) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <Image
+            style={
+              {
+                flex: 1,
+                resizeMode: 'cover'
+              }
+            }
+            source={require('./images/gifs/splash.gif')} />
+        </View>
+      );
+    }
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <AppContainer />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
 
 AppRegistry.registerComponent('MightyLifter', () => MightyLifter);

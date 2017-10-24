@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "link": "react-native link",
+    "ios": "react-native run-ios"
   },
   "dependencies": {
     "firebase": "^3.6.10",
@@ -13,7 +15,7 @@
     "react-native": "^0.42.0",
     "react-native-material-design": "^0.3.7",
     "react-native-side-menu": "^0.20.1",
-    "react-native-vector-icons": "^4.0.0"
+    "react-native-vector-icons": "^4.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
